@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template, request
 import ssl
 from urllib.request import urlopen
 from bs4 import BeautifulSoup as soup
@@ -8,7 +8,7 @@ app.config['DEBUG'] = True
 
 # GLOBAL VARIABLES
 data_news = {'articles': []}
-url = "https://news.google.com/news/rss/?ned=us&gl=US&hl=en"
+url = "https://news.google.com/rss"
 
 def news(xml_news_url, counter=20):
     context = ssl._create_unverified_context()
@@ -26,10 +26,19 @@ def news(xml_news_url, counter=20):
 
 @app.route('/', methods=['GET'])
 def home():
-    news(url, 3)
-    return "<h1>API</h1><p>This is going to be where my api data sits</p>"
+    return render_template('home.html')
 
 @app.route('/api/articles/all', methods=['GET'])
 def api_all():
     news(url)
+    return jsonify(data_news)
+
+@app.route('/api/articles', methods=['GET'])
+def api_counter():
+    if 'count' in request.args:
+        counter = int(request.args['count'])
+    else:
+        return "Error: No count field provided. Please specify a count."
+
+    news(url, counter)
     return jsonify(data_news)
