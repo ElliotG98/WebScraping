@@ -1,6 +1,6 @@
 $(function() {
     $.ajax({
-        url:"127.0.0.1:5000/api/articles",
+        url:"/api/articles",
         method: "GET",
         dataType: "json",
         success: function(data){
