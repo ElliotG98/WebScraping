@@ -24,7 +24,7 @@ def news(xml_news_url, counter=20):
         data_news['articles'].append(art_dict)
 
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def home():
     return render_template('home.html')
 
@@ -38,7 +38,7 @@ def api_counter():
     if 'count' in request.args:
         counter = int(request.args['count'])
     else:
-        return "Error: No count field provided. Please specify a count."
+        return "Error: No count field provided. Please specify a query parameter."
 
     news(url, counter)
     return jsonify(data_news)
