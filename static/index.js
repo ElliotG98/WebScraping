@@ -1,15 +1,20 @@
 $(function() {
     $.ajax({
-        url:"/api/articles",
+        url:"api/articles/all",
         method: "GET",
-        dataType: "json",
+        type: "json",
         success: function(data){
-            var str = "";
-            for(var i=0;i<data.articles.length;i++){
-                console.log(data.articles[i])
-                str += "Title: " + data.articles[i].title;
-            }
-            $("body").html(str)
+            console.log(data);
+            data.articles.forEach(function(news){
+                var title = "Title: " + news.title;
+                var pubDate = "PubDate: " + news.pubDate;
+                var link = "Link: " + news.link;
+                console.log(title)
+                $("body").append("<div class='card'><div class='card-header'>" + title + "</div><div class='card-body'><blockquote class='blockquote mb-0'><p>" + link + "</p><footer class='blockquote-footer'>" + pubDate + "</footer></blockquote></div></div>")
+            })
+        },
+        error: function(data){
+            $("body").append("<div>Error</div>")
         }
     });
 });
